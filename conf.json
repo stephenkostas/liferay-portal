@@ -1,6 +1,6 @@
 {
     "plugins": [],
-    "recurseDepth": 10,
+    "recurseDepth": 20,
     "source": {
         "includePattern": ".+\\.es.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"

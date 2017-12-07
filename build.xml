@@ -782,15 +782,9 @@ message.
 
 	<target name="jsdoc">
 		<property name="jsdoc.dest.dir" value="${doc.dir}/jsdoc" />
+		<property name="jsdoc.read.dir" value="./" />
 
 		<remake-dir dir="${jsdoc.dest.dir}" />
-		<antcall target="jsdoc-cmd">
-			<param name="jsdoc.read.dir" value=".\modules\apps\" />
-			<param name="jsdoc.dest.dir" value="${jsdoc.dest.dir}" />
-		</antcall>
-	</target>
-	
-	<target name="jsdoc-cmd">
 		<execute>
 			jsdoc ${jsdoc.read.dir} -c ./conf.json -r -d ./api/jsdoc
 		</execute>
