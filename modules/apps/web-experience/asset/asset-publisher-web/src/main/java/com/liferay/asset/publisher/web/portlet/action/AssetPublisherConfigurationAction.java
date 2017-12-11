@@ -17,16 +17,17 @@ package com.liferay.asset.publisher.web.portlet.action;
 import com.liferay.asset.kernel.AssetRendererFactoryRegistryUtil;
 import com.liferay.asset.kernel.exception.AssetTagException;
 import com.liferay.asset.kernel.exception.DuplicateQueryRuleException;
-import com.liferay.asset.kernel.model.AssetQueryRule;
 import com.liferay.asset.kernel.model.AssetRendererFactory;
 import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.asset.publisher.web.configuration.AssetPublisherPortletInstanceConfiguration;
 import com.liferay.asset.publisher.web.configuration.AssetPublisherWebConfiguration;
 import com.liferay.asset.publisher.web.constants.AssetPublisherPortletKeys;
 import com.liferay.asset.publisher.web.constants.AssetPublisherWebKeys;
+import com.liferay.asset.publisher.web.internal.util.AssetPublisherWebUtil;
 import com.liferay.asset.publisher.web.util.AssetPublisherCustomizer;
 import com.liferay.asset.publisher.web.util.AssetPublisherCustomizerRegistry;
 import com.liferay.asset.publisher.web.util.AssetPublisherUtil;
+import com.liferay.asset.publisher.web.util.AssetQueryRule;
 import com.liferay.exportimport.kernel.staging.LayoutStagingUtil;
 import com.liferay.exportimport.kernel.staging.Staging;
 import com.liferay.item.selector.ItemSelector;
@@ -134,6 +135,10 @@ public class AssetPublisherConfigurationAction
 			AssetPublisherWebKeys.ASSET_PUBLISHER_WEB_CONFIGURATION,
 			assetPublisherWebConfiguration);
 
+		request.setAttribute(
+			AssetPublisherWebKeys.ASSET_PUBLISHER_WEB_UTIL,
+			assetPublisherWebUtil);
+
 		request.setAttribute(AssetPublisherWebKeys.ITEM_SELECTOR, itemSelector);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
@@ -237,8 +242,7 @@ public class AssetPublisherConfigurationAction
 				addScope(actionRequest, preferences);
 			}
 			else if (cmd.equals("add-selection")) {
-				AssetPublisherUtil.addSelection(
-					actionRequest, preferences, portletResource);
+				assetPublisherWebUtil.addSelection(actionRequest, preferences);
 			}
 			else if (cmd.equals("move-selection-down")) {
 				moveSelectionDown(actionRequest, preferences);
@@ -337,9 +341,9 @@ public class AssetPublisherConfigurationAction
 
 		Layout layout = themeDisplay.getLayout();
 
-		if (!AssetPublisherUtil.isScopeIdSelectable(
+		if (!assetPublisherWebUtil.isScopeIdSelectable(
 				themeDisplay.getPermissionChecker(), scopeId,
-				themeDisplay.getCompanyGroupId(), layout)) {
+				themeDisplay.getCompanyGroupId(), layout, true)) {
 
 			throw new PrincipalException();
 		}
@@ -373,7 +377,7 @@ public class AssetPublisherConfigurationAction
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
 				className);
 
-		String assetClassName = AssetPublisherUtil.getClassName(
+		String assetClassName = assetPublisherWebUtil.getClassName(
 			assetRendererFactory);
 
 		return assetClassName;
@@ -791,6 +795,10 @@ public class AssetPublisherConfigurationAction
 	protected AssetPublisherCustomizerRegistry assetPublisherCustomizerRegistry;
 
 	protected AssetPublisherWebConfiguration assetPublisherWebConfiguration;
+
+	@Reference
+	protected AssetPublisherWebUtil assetPublisherWebUtil;
+
 	protected AssetTagLocalService assetTagLocalService;
 	protected GroupLocalService groupLocalService;
 	protected ItemSelector itemSelector;

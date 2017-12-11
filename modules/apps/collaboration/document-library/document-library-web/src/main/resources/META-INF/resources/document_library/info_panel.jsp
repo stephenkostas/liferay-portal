@@ -177,6 +177,22 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(fileEntries) && ListUtil.isEmp
 					</div>
 
 					<dl class="sidebar-block">
+						<c:if test="<%= fileVersion.getModel() instanceof DLFileVersion %>">
+
+							<%
+							DLFileVersion dlFileVersion = (DLFileVersion)fileVersion.getModel();
+
+							DLFileEntryType dlFileEntryType = dlFileVersion.getDLFileEntryType();
+							%>
+
+							<dt class="h5">
+								<liferay-ui:message key="document-type" />
+							</dt>
+							<dd class="h6 sidebar-caption">
+								<%= HtmlUtil.escape(dlFileEntryType.getName(locale)) %>
+							</dd>
+						</c:if>
+
 						<dt class="h5">
 							<liferay-ui:message key="created" />
 						</dt>
@@ -229,14 +245,14 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(fileEntries) && ListUtil.isEmp
 					%>
 
 					<div class="lfr-asset-categories sidebar-block">
-						<liferay-ui:asset-categories-summary
+						<liferay-asset:asset-categories-summary
 							className="<%= DLFileEntryConstants.getClassName() %>"
 							classPK="<%= assetClassPK %>"
 						/>
 					</div>
 
 					<div class="lfr-asset-tags sidebar-block">
-						<liferay-ui:asset-tags-summary
+						<liferay-asset:asset-tags-summary
 							className="<%= DLFileEntryConstants.getClassName() %>"
 							classPK="<%= assetClassPK %>"
 							message="tags"
@@ -264,7 +280,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(fileEntries) && ListUtil.isEmp
 
 					<c:if test="<%= (layoutAssetEntry != null) && dlPortletInstanceSettings.isEnableRelatedAssets() && fileEntry.isSupportsSocial() %>">
 						<div class="entry-links">
-							<liferay-ui:asset-links
+							<liferay-asset:asset-links
 								assetEntryId="<%= layoutAssetEntry.getEntryId() %>"
 							/>
 						</div>

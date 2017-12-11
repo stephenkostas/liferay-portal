@@ -14,9 +14,9 @@
 
 package com.liferay.source.formatter.checks;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -115,7 +115,7 @@ public class JSPUnusedTermsCheck extends BaseFileCheck {
 		List<String> allJSPFileNames = SourceFormatterUtil.filterFileNames(
 			_allFileNames, excludes,
 			new String[] {"**/*.jsp", "**/*.jspf", "**/*.tag"},
-			getSourceFormatterExcludes());
+			getSourceFormatterExcludes(), true);
 
 		return JSPSourceUtil.getContentsMap(allJSPFileNames);
 	}

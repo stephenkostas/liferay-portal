@@ -14,7 +14,7 @@
 
 package com.liferay.source.formatter.checks;
 
-import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -35,11 +35,6 @@ import java.util.regex.Pattern;
  * @author Peter Shin
  */
 public class GradleDependenciesCheck extends BaseFileCheck {
-
-	@Override
-	public void init() throws Exception {
-		_projectPathPrefix = getProjectPathPrefix();
-	}
 
 	@Override
 	protected String doProcess(
@@ -114,12 +109,17 @@ public class GradleDependenciesCheck extends BaseFileCheck {
 		for (String dependency : uniqueDependencies) {
 			String configuration = _getConfiguration(dependency);
 
-			if (configuration.equals("compile") &&
-				isModulesApp(absolutePath, _projectPathPrefix, false) &&
+			if (isModulesApp(absolutePath, false) &&
 				_hasBNDFile(absolutePath)) {
 
-				dependency = StringUtil.replaceFirst(
-					dependency, "compile", "provided");
+				if (configuration.equals("compile")) {
+					dependency = StringUtil.replaceFirst(
+						dependency, "compile", "provided");
+				}
+				else if (configuration.equals("provided")) {
+					dependency = StringUtil.removeSubstrings(
+						dependency, "transitive: false, ", "transitive: true,");
+				}
 			}
 
 			if ((previousConfiguration == null) ||
@@ -157,12 +157,12 @@ public class GradleDependenciesCheck extends BaseFileCheck {
 	}
 
 	private final Pattern _dependenciesPattern = Pattern.compile(
-		"^dependencies \\{(.+?\n)\\}", Pattern.DOTALL | Pattern.MULTILINE);
+		"^dependencies \\{(((?![\\{\\}]).)+?\n)\\}",
+		Pattern.DOTALL | Pattern.MULTILINE);
 	private final Pattern _incorrectGroupNameVersionPattern = Pattern.compile(
 		"(^[^\\s]+)\\s+\"([^:]+?):([^:]+?):([^\"]+?)\"(.*?)", Pattern.DOTALL);
 	private final Pattern _incorrectWhitespacePattern = Pattern.compile(
 		":[^ \n]");
-	private String _projectPathPrefix;
 
 	private class GradleDependencyComparator
 		implements Comparator<String>, Serializable {

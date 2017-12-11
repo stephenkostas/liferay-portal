@@ -14,15 +14,13 @@
 
 package com.liferay.vulcan.wiring.osgi.util;
 
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ReflectionUtil;
-import com.liferay.vulcan.error.VulcanDeveloperError;
+import com.liferay.vulcan.result.Try;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * Provides methods for skipping problems related to the Java generic system.
+ * Provides methods for skipping problems related to the Java generics system.
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
@@ -31,36 +29,94 @@ import java.lang.reflect.Type;
 public class GenericUtil {
 
 	/**
-	 * Given a type denoted by <code>T&lt;S&gt;</code> returns S class or throws
-	 * a {@link VulcanDeveloperError.MustHaveValidGenericType}.
+	 * Returns the class of the parameterized class's first type argument.
 	 *
-	 * @param  t instance of type T.
-	 * @param  clazz class of type T.
-	 * @return class of type S.
+	 * @param  clazz the parameterized class
+	 * @return the class of the parameterized class's first type argument
 	 */
-	public static <T, S> Class<S> getGenericClass(T t, Class<T> clazz) {
-		Type genericType = ReflectionUtil.getGenericInterface(t, clazz);
+	public static <S> Try<Class<S>> getFirstGenericTypeArgumentTry(
+		Class<?> clazz) {
 
-		if ((genericType != null) &&
-			(genericType instanceof ParameterizedType)) {
+		return getGenericTypeArgumentTry(clazz, 0);
+	}
 
-			ParameterizedType parameterizedType =
-				(ParameterizedType)genericType;
+	/**
+	 * Returns the class of the first type argument in the {@code Type}.
+	 *
+	 * @param  type the type
+	 * @return the class of the type's first type argument
+	 */
+	public static <S> Try<Class<S>> getFirstGenericTypeArgumentTry(Type type) {
+		return getGenericTypeArgumentTry(type, 0);
+	}
 
-			Type[] typeArguments = parameterizedType.getActualTypeArguments();
+	/**
+	 * Returns the class of the parameterized class's n-th type argument.
+	 *
+	 * @param  clazz the parameterized class
+	 * @param  position the n-th type argument's position in the parameterized
+	 *         class
+	 * @return the class of the parameterized class's n-th type argument
+	 */
+	public static <S> Try<Class<S>> getGenericTypeArgumentTry(
+		Class<?> clazz, int position) {
 
-			if (!ArrayUtil.isEmpty(typeArguments) &&
-				(typeArguments.length == 1)) {
+		Type[] genericInterfaces = clazz.getGenericInterfaces();
 
-				try {
-					return (Class<S>)typeArguments[0];
-				}
-				catch (ClassCastException cce) {
-				}
-			}
+		Try<Class<S>> classTry = Try.fail(
+			new IllegalArgumentException(
+				"Class " + clazz + " does not implement any interfaces"));
+
+		for (Type genericInterface : genericInterfaces) {
+			classTry = classTry.recoverWith(
+				throwable -> getGenericTypeArgumentTry(
+					genericInterface, position));
 		}
 
-		throw new VulcanDeveloperError.MustHaveValidGenericType(t.getClass());
+		return classTry.recoverWith(
+			throwable -> getGenericTypeArgumentTry(
+				clazz.getSuperclass(), position));
+	}
+
+	/**
+	 * Returns the class of the n-th type argument in the {@code Type}.
+	 *
+	 * @param  type the type
+	 * @param  position the type's n-th type argument
+	 * @return the class of the type's n-th type argument
+	 */
+	public static <S> Try<Class<S>> getGenericTypeArgumentTry(
+		Type type, int position) {
+
+		Try<Type> typeTry = Try.success(type);
+
+		return typeTry.filter(
+			ParameterizedType.class::isInstance
+		).map(
+			ParameterizedType.class::cast
+		).map(
+			ParameterizedType::getActualTypeArguments
+		).filter(
+			typeArguments -> {
+				if (typeArguments.length >= 1) {
+					return true;
+				}
+
+				return false;
+			}
+		).map(
+			typeArguments -> typeArguments[position]
+		).map(
+			typeArgument -> {
+				if (typeArgument instanceof ParameterizedType) {
+					return ((ParameterizedType)typeArgument).getRawType();
+				}
+
+				return typeArgument;
+			}
+		).map(
+			typeArgument -> (Class<S>)typeArgument
+		);
 	}
 
 }

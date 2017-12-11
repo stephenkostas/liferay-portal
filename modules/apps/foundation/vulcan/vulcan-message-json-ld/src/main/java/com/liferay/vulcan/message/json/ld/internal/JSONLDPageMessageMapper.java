@@ -15,7 +15,6 @@
 package com.liferay.vulcan.message.json.ld.internal;
 
 import com.liferay.vulcan.list.FunctionalList;
-import com.liferay.vulcan.message.RequestInfo;
 import com.liferay.vulcan.message.json.JSONObjectBuilder;
 import com.liferay.vulcan.message.json.PageMessageMapper;
 import com.liferay.vulcan.pagination.Page;
@@ -23,18 +22,22 @@ import com.liferay.vulcan.pagination.Page;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.ws.rs.core.HttpHeaders;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Adds Vulcan the ability to represent collection pages in JSON-LD + Hydra
- * format.
+ * Represents collection pages in JSON-LD + Hydra format.
+ *
+ * <p>
+ * For more information, see <a href="https://json-ld.org/">JSON-LD </a> and <a
+ * href="https://www.hydra-cg.com/">Hydra </a> .
+ * </p>
  *
  * @author Alejandro Hernández
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
- * @see    <a href="https://json-ld.org/">JSON-LD</a>
- * @see    <a href="https://www.hydra-cg.com/">Hydra</a>
  */
 @Component(immediate = true)
 public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
@@ -57,7 +60,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"view", "@id"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -68,17 +71,30 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"view", "first"
-		).value(
+		).stringValue(
 			url
 		);
 	}
 
 	@Override
-	public void mapItemEmbeddedResourceField(
+	public void mapItemBooleanField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		Boolean value) {
+
+		itemJSONObjectBuilder.field(
+			fieldName
+		).booleanValue(
+			value
+		);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceBooleanField(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder,
 		FunctionalList<String> embeddedPathElements, String fieldName,
-		Object fieldData) {
+		Boolean value) {
 
 		Stream<String> tailStream = embeddedPathElements.tailStream();
 
@@ -86,8 +102,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			fieldName
-		).value(
-			fieldData
+		).booleanValue(
+			value
 		);
 	}
 
@@ -100,6 +116,42 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		_jsonLDSingleModelMessageMapper.mapEmbeddedResourceLink(
 			itemJSONObjectBuilder, embeddedPathElements, fieldName, url);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceNumberField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		Number value) {
+
+		Stream<String> tailStream = embeddedPathElements.tailStream();
+
+		itemJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
+		).field(
+			fieldName
+		).numberValue(
+			value
+		);
+	}
+
+	@Override
+	public void mapItemEmbeddedResourceStringField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder,
+		FunctionalList<String> embeddedPathElements, String fieldName,
+		String value) {
+
+		Stream<String> tailStream = embeddedPathElements.tailStream();
+
+		itemJSONObjectBuilder.nestedField(
+			embeddedPathElements.head(), tailStream.toArray(String[]::new)
+		).field(
+			fieldName
+		).stringValue(
+			value
+		);
 	}
 
 	@Override
@@ -123,19 +175,6 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
-	public void mapItemField(
-		JSONObjectBuilder pageJSONObjectBuilder,
-		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
-		Object value) {
-
-		itemJSONObjectBuilder.field(
-			fieldName
-		).value(
-			value
-		);
-	}
-
-	@Override
 	public void mapItemLink(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String fieldName, String url) {
@@ -155,6 +194,19 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
+	public void mapItemNumberField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		Number value) {
+
+		itemJSONObjectBuilder.field(
+			fieldName
+		).numberValue(
+			value
+		);
+	}
+
+	@Override
 	public void mapItemSelfURL(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, String url) {
@@ -163,12 +215,25 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	}
 
 	@Override
+	public void mapItemStringField(
+		JSONObjectBuilder pageJSONObjectBuilder,
+		JSONObjectBuilder itemJSONObjectBuilder, String fieldName,
+		String value) {
+
+		itemJSONObjectBuilder.field(
+			fieldName
+		).stringValue(
+			value
+		);
+	}
+
+	@Override
 	public void mapItemTotalCount(
 		JSONObjectBuilder jsonObjectBuilder, int totalCount) {
 
 		jsonObjectBuilder.field(
 			"totalItems"
-		).value(
+		).numberValue(
 			totalCount
 		);
 	}
@@ -187,7 +252,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"view", "last"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -198,7 +263,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"view", "next"
-		).value(
+		).stringValue(
 			url
 		);
 	}
@@ -207,7 +272,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void mapPageCount(JSONObjectBuilder jsonObjectBuilder, int count) {
 		jsonObjectBuilder.field(
 			"numberOfItems"
-		).value(
+		).numberValue(
 			count
 		);
 	}
@@ -218,39 +283,39 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.nestedField(
 			"view", "previous"
-		).value(
+		).stringValue(
 			url
 		);
 	}
 
 	@Override
 	public void onFinish(
-		JSONObjectBuilder jsonObjectBuilder, Page<T> page, Class<T> modelClass,
-		RequestInfo requestInfo) {
+		JSONObjectBuilder jsonObjectBuilder, Page<T> page,
+		HttpHeaders httpHeaders) {
 
 		jsonObjectBuilder.nestedField(
 			"@context", "Collection"
-		).value(
+		).stringValue(
 			"http://www.w3.org/ns/hydra/pagination.jsonld"
 		);
 
 		jsonObjectBuilder.nestedField(
 			"@context", "@vocab"
-		).value(
+		).stringValue(
 			"http://schema.org"
 		);
 
 		jsonObjectBuilder.nestedField(
 			"view", "@type"
 		).arrayValue(
-		).add(
+		).addString(
 			"PartialCollectionView"
 		);
 
 		jsonObjectBuilder.field(
 			"@type"
 		).arrayValue(
-		).add(
+		).addString(
 			"Collection"
 		);
 	}
@@ -259,7 +324,7 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 	public void onFinishItem(
 		JSONObjectBuilder pageJSONObjectBuilder,
 		JSONObjectBuilder itemJSONObjectBuilder, T model, Class<T> modelClass,
-		RequestInfo requestInfo) {
+		HttpHeaders httpHeaders) {
 
 		pageJSONObjectBuilder.field(
 			"members"

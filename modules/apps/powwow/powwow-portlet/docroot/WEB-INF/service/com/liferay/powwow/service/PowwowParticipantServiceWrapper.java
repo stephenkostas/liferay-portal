@@ -40,32 +40,6 @@ public class PowwowParticipantServiceWrapper implements PowwowParticipantService
 		return _powwowParticipantService.deletePowwowParticipant(powwowParticipant);
 	}
 
-	@Override
-	public com.liferay.powwow.model.PowwowParticipant updatePowwowParticipant(
-		long powwowParticipantId, long powwowMeetingId, java.lang.String name,
-		long participantUserId, java.lang.String emailAddress, int type,
-		int status,
-		com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _powwowParticipantService.updatePowwowParticipant(powwowParticipantId,
-			powwowMeetingId, name, participantUserId, emailAddress, type,
-			status, serviceContext);
-	}
-
-	@Override
-	public int getPowwowParticipantsCount(long powwowMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _powwowParticipantService.getPowwowParticipantsCount(powwowMeetingId);
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _powwowParticipantService.invokeMethod(name, parameterTypes,
-			arguments);
-	}
-
 	/**
 	* Returns the OSGi service identifier.
 	*
@@ -81,6 +55,24 @@ public class PowwowParticipantServiceWrapper implements PowwowParticipantService
 		long powwowMeetingId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _powwowParticipantService.getPowwowParticipants(powwowMeetingId);
+	}
+
+	@Override
+	public int getPowwowParticipantsCount(long powwowMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _powwowParticipantService.getPowwowParticipantsCount(powwowMeetingId);
+	}
+
+	@Override
+	public com.liferay.powwow.model.PowwowParticipant updatePowwowParticipant(
+		long powwowParticipantId, long powwowMeetingId, java.lang.String name,
+		long participantUserId, java.lang.String emailAddress, int type,
+		int status,
+		com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _powwowParticipantService.updatePowwowParticipant(powwowParticipantId,
+			powwowMeetingId, name, participantUserId, emailAddress, type,
+			status, serviceContext);
 	}
 
 	@Override

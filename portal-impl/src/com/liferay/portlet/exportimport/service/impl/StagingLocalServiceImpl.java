@@ -437,7 +437,6 @@ public class StagingLocalServiceImpl extends StagingLocalServiceBaseImpl {
 	 */
 	@Deprecated
 	@Override
-	@SuppressWarnings("unused")
 	public MissingReferences publishStagingRequest(
 			long userId, long stagingRequestId, boolean privateLayout,
 			Map<String, String[]> parameterMap)
@@ -503,6 +502,8 @@ public class StagingLocalServiceImpl extends StagingLocalServiceBaseImpl {
 			ExportImportThreadLocal.setLayoutStagingInProcess(false);
 
 			LocaleThreadLocal.setSiteDefaultLocale(siteDefaultLocale);
+
+			FileUtil.delete(file);
 		}
 	}
 
@@ -903,14 +904,10 @@ public class StagingLocalServiceImpl extends StagingLocalServiceBaseImpl {
 
 		IndexStatusManagerThreadLocal.setIndexReadOnly(true);
 
-		FileOutputStream fileOutputStream = null;
+		File tempFile = FileUtil.createTempFile("lar");
 
-		File tempFile = null;
-
-		try {
-			tempFile = FileUtil.createTempFile("lar");
-
-			fileOutputStream = new FileOutputStream(tempFile);
+		try (FileOutputStream fileOutputStream =
+				new FileOutputStream(tempFile)) {
 
 			List<FileEntry> fileEntries =
 				PortletFileRepositoryUtil.getPortletFileEntries(
@@ -964,8 +961,6 @@ public class StagingLocalServiceImpl extends StagingLocalServiceBaseImpl {
 		}
 		finally {
 			IndexStatusManagerThreadLocal.setIndexReadOnly(indexReadOnly);
-
-			StreamUtil.cleanUp(fileOutputStream);
 
 			FileUtil.delete(tempFile);
 		}

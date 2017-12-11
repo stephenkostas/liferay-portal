@@ -15,6 +15,7 @@
 package com.liferay.portal.verify;
 
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.dao.orm.common.SQLTransformer;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -48,7 +49,6 @@ import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.ResourceActionLocalServiceUtil;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -393,16 +393,26 @@ public class VerifyPermission extends VerifyProcess {
 			long userClassNameId, long userGroupClassNameId, long[] companyIds)
 		throws Exception {
 
+		try {
+			runSQL(
+				"create index TEMP_INDEX on ResourcePermission (roleId, " +
+					"scope, primKey[$COLUMN_LENGTH:255$])");
+		}
+		catch (SQLException sqle) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(sqle, sqle);
+			}
+		}
+
 		for (long companyId : companyIds) {
 			Role powerUserRole = RoleLocalServiceUtil.getRole(
 				companyId, RoleConstants.POWER_USER);
 			Role userRole = RoleLocalServiceUtil.getRole(
 				companyId, RoleConstants.USER);
 
-			StringBundler sb = new StringBundler(19);
+			StringBundler sb = new StringBundler(18);
 
 			sb.append("update ignore ResourcePermission inner join Layout on ");
-			sb.append("ResourcePermission.companyId = Layout.companyId and ");
 			sb.append("ResourcePermission.primKey like ");
 			sb.append("replace('[$PLID$]_LAYOUT_%', '[$PLID$]', ");
 			sb.append("cast_text(Layout.plid)) inner join Group_ on ");
@@ -423,6 +433,8 @@ public class VerifyPermission extends VerifyProcess {
 
 			runSQL(sb.toString());
 		}
+
+		runSQL("drop index TEMP_INDEX on ResourcePermission");
 	}
 
 	protected void fixUserDefaultRolePermissionsOracle(

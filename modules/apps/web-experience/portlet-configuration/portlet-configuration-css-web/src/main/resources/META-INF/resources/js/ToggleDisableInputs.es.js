@@ -46,6 +46,8 @@ ToggleDisableInputs.STATE = {
 	/**
 	 * Switch state
 	 * @type {Boolean}
+	 * @memberof! ToggleDisableInputs#
+	 * @instance ToggleDisableInputs.STATE.checked
 	 */
 	checked: {
 		validator: core.isBoolean,
@@ -55,6 +57,8 @@ ToggleDisableInputs.STATE = {
 	/**
 	 * Flag to specify the logic for disabling inputs based on switch state
 	 * @type {Boolean}
+	 * @memberof! ToggleDisableInputs#
+	 * @instance ToggleDisableInputs.STATE.disableOnChecked
 	 */
 	disableOnChecked: {
 		validator: core.isBoolean,
@@ -64,6 +68,8 @@ ToggleDisableInputs.STATE = {
 	/**
 	 * CSS Selector for the inputs to enable/disable
 	 * @type {String}
+	 * @memberof! ToggleDisableInputs#
+	 * @instance ToggleDisableInputs.STATE.inputSelector
 	 */
 	inputSelector: {
 		validator: core.isString
@@ -72,6 +78,8 @@ ToggleDisableInputs.STATE = {
 	/**
 	 * Label of the switch
 	 * @type {String}
+	 * @memberof! ToggleDisableInputs#
+	 * @instance ToggleDisableInputs.STATE.label
 	 */
 	label: {
 		validator: core.isString

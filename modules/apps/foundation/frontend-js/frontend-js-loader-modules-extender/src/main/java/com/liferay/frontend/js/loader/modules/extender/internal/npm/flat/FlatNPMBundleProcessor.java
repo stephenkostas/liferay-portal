@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -101,6 +102,26 @@ public class FlatNPMBundleProcessor implements JSBundleProcessor {
 		}
 	}
 
+	private String _normalizeModuleContent(String moduleContent) {
+		moduleContent = moduleContent.replaceAll("\n", " ");
+
+		int index = moduleContent.indexOf("Liferay.Loader.define(");
+
+		if (index == -1) {
+			return StringPool.BLANK;
+		}
+
+		moduleContent = moduleContent.substring(index);
+
+		index = moduleContent.indexOf("function");
+
+		if (index == -1) {
+			return StringPool.BLANK;
+		}
+
+		return moduleContent.substring(0, index);
+	}
+
 	/**
 	 * Returns the dependencies of a module given its URL. The dependencies are
 	 * parsed by reading the module's JavaScript code.
@@ -111,7 +132,8 @@ public class FlatNPMBundleProcessor implements JSBundleProcessor {
 	private Collection<String> _parseModuleDependencies(URL url)
 		throws IOException {
 
-		String urlContent = StringUtil.read(url.openStream());
+		String urlContent = _normalizeModuleContent(
+			StringUtil.read(url.openStream()));
 
 		Matcher matcher = _moduleDefinitionPattern.matcher(urlContent);
 
@@ -264,8 +286,9 @@ public class FlatNPMBundleProcessor implements JSBundleProcessor {
 		}
 		catch (Exception e) {
 			_log.error(
-				"Unable to parse package of " + flatJSBundle + ": " + location +
-					"/package.json",
+				StringBundler.concat(
+					"Unable to parse package of ", String.valueOf(flatJSBundle),
+					": ", location, "/package.json"),
 				e);
 
 			return;
@@ -321,7 +344,7 @@ public class FlatNPMBundleProcessor implements JSBundleProcessor {
 		FlatNPMBundleProcessor.class);
 
 	private static final Pattern _moduleDefinitionPattern = Pattern.compile(
-		"Liferay\\.Loader\\.define.*\\[(.*)\\].*function", Pattern.MULTILINE);
+		"Liferay\\.Loader\\.define.*\\[(.*)\\].*");
 
 	@Reference
 	private JSONFactory _jsonFactory;

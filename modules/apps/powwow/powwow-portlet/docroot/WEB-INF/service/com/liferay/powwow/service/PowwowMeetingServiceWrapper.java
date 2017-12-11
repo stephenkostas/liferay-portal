@@ -56,11 +56,33 @@ public class PowwowMeetingServiceWrapper implements PowwowMeetingService,
 		return _powwowMeetingService.deletePowwowMeeting(powwowMeetingId);
 	}
 
+	/**
+	* Returns the OSGi service identifier.
+	*
+	* @return the OSGi service identifier
+	*/
+	@Override
+	public java.lang.String getOSGiServiceIdentifier() {
+		return _powwowMeetingService.getOSGiServiceIdentifier();
+	}
+
 	@Override
 	public com.liferay.powwow.model.PowwowMeeting getPowwowMeeting(
 		long powwowMeetingId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _powwowMeetingService.getPowwowMeeting(powwowMeetingId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.powwow.model.PowwowMeeting> getPowwowMeetings(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc) {
+		return _powwowMeetingService.getPowwowMeetings(groupId, start, end, obc);
+	}
+
+	@Override
+	public int getPowwowMeetingsCount(long groupId) {
+		return _powwowMeetingService.getPowwowMeetingsCount(groupId);
 	}
 
 	@Override
@@ -76,36 +98,6 @@ public class PowwowMeetingServiceWrapper implements PowwowMeetingService,
 			powwowServerId, name, description, providerType,
 			providerTypeMetadataMap, languageId, calendarBookingId, status,
 			powwowParticipants, serviceContext);
-	}
-
-	@Override
-	public int getPowwowMeetingsCount(long groupId) {
-		return _powwowMeetingService.getPowwowMeetingsCount(groupId);
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _powwowMeetingService.invokeMethod(name, parameterTypes,
-			arguments);
-	}
-
-	/**
-	* Returns the OSGi service identifier.
-	*
-	* @return the OSGi service identifier
-	*/
-	@Override
-	public java.lang.String getOSGiServiceIdentifier() {
-		return _powwowMeetingService.getOSGiServiceIdentifier();
-	}
-
-	@Override
-	public java.util.List<com.liferay.powwow.model.PowwowMeeting> getPowwowMeetings(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc) {
-		return _powwowMeetingService.getPowwowMeetings(groupId, start, end, obc);
 	}
 
 	@Override

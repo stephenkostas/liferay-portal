@@ -51,6 +51,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.felix.service.command.Descriptor;
 import org.apache.felix.utils.log.Logger;
 
 import org.osgi.framework.BundleContext;
@@ -78,6 +79,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 )
 public class ReleaseManagerOSGiCommands {
 
+	@Descriptor("List pending or running upgrades")
 	public void check() {
 		Set<String> bundleSymbolicNames = _serviceTrackerMap.keySet();
 
@@ -95,8 +97,9 @@ public class ReleaseManagerOSGiCommands {
 
 			if (size > 1) {
 				System.out.println(
-					"There are " + size + " possible end nodes for " +
-						schemaVersionString);
+					StringBundler.concat(
+						"There are ", String.valueOf(size),
+						" possible end nodes for ", schemaVersionString));
 			}
 
 			if (size == 0) {
@@ -122,10 +125,12 @@ public class ReleaseManagerOSGiCommands {
 		}
 	}
 
+	@Descriptor("Execute upgrade for a specific module")
 	public void execute(String bundleSymbolicName) {
 		doExecute(bundleSymbolicName, _serviceTrackerMap);
 	}
 
+	@Descriptor("Execute upgrade for a specific module and final version")
 	public void execute(String bundleSymbolicName, String toVersionString) {
 		String schemaVersionString = getSchemaVersionString(bundleSymbolicName);
 
@@ -138,6 +143,7 @@ public class ReleaseManagerOSGiCommands {
 				schemaVersionString, toVersionString));
 	}
 
+	@Descriptor("Execute all pending upgrades")
 	public void executeAll() {
 		Set<String> upgradeThrewExceptionBundleSymbolicNames = new HashSet<>();
 
@@ -168,19 +174,22 @@ public class ReleaseManagerOSGiCommands {
 		System.out.println(sb.toString());
 	}
 
+	@Descriptor("List registered upgrade processes for all modules")
 	public void list() {
 		for (String bundleSymbolicName : _serviceTrackerMap.keySet()) {
 			list(bundleSymbolicName);
 		}
 	}
 
+	@Descriptor("List registered upgrade processes for a specific module")
 	public void list(String bundleSymbolicName) {
 		List<UpgradeInfo> upgradeProcesses = _serviceTrackerMap.getService(
 			bundleSymbolicName);
 
 		System.out.println(
-			"Registered upgrade processes for " + bundleSymbolicName + " " +
-				getSchemaVersionString(bundleSymbolicName));
+			StringBundler.concat(
+				"Registered upgrade processes for ", bundleSymbolicName, " ",
+				getSchemaVersionString(bundleSymbolicName)));
 
 		for (UpgradeInfo upgradeProcess : upgradeProcesses) {
 			System.out.println("\t" + upgradeProcess);
@@ -217,8 +226,9 @@ public class ReleaseManagerOSGiCommands {
 
 		_serviceTrackerMap = ServiceTrackerMapFactory.openMultiValueMap(
 			bundleContext, UpgradeStep.class,
-			"(&(upgrade.bundle.symbolic.name=*)(|(upgrade.db.type=any)" +
-				"(upgrade.db.type=" + db.getDBType() + ")))",
+			StringBundler.concat(
+				"(&(upgrade.bundle.symbolic.name=*)(|(upgrade.db.type=any)",
+				"(upgrade.db.type=", String.valueOf(db.getDBType()), ")))"),
 			new PropertyServiceReferenceMapper<String, UpgradeStep>(
 				"upgrade.bundle.symbolic.name"),
 			new UpgradeServiceTrackerCustomizer(bundleContext),
@@ -244,8 +254,10 @@ public class ReleaseManagerOSGiCommands {
 
 		if (size > 1) {
 			throw new IllegalStateException(
-				"There are " + size + " possible end nodes for " +
-					getSchemaVersionString(bundleSymbolicName));
+				StringBundler.concat(
+					"There are ", String.valueOf(size),
+					" possible end nodes for ",
+					getSchemaVersionString(bundleSymbolicName)));
 		}
 
 		if (size == 0) {

@@ -90,9 +90,13 @@ AUI.add(
 			_getTemplate: function(context) {
 				var instance = this;
 
-				var renderer = SoyTemplateUtil.getTemplateRenderer('ddm.select_options');
+				var renderer = SoyTemplateUtil.getTemplateRenderer('DDMSelect.select_options');
 
-				return renderer(context);
+				var container = document.createDocumentFragment();
+
+				new renderer(context, container);
+
+				return container.firstChild.outerHTML;
 			},
 
 			_renderList: function(options) {
@@ -123,6 +127,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['highlight', 'liferay-ddm-form-field-select-template', 'liferay-ddm-soy-template-util']
+		requires: ['highlight', 'liferay-ddm-soy-template-util']
 	}
 );
