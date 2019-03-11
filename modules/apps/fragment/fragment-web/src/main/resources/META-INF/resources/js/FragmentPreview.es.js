@@ -89,7 +89,7 @@ class FragmentPreview extends PortletBase {
 	}
 
 	/**
-	 * Event sent when the preview frame content has been loaded
+	 * This event is triggered when the preview frame content has been loaded.
 	 * @private
 	 * @review
 	 */
@@ -109,7 +109,7 @@ class FragmentPreview extends PortletBase {
 	}
 
 	/**
-	 * Sets the previewSize property and queues an update
+	 * Sets the previewSize property and queues an update.
 	 * @param {string} previewSize
 	 * @protected
 	 * @return {string}
@@ -234,7 +234,6 @@ FragmentPreview.STATE = {
 	 * URLs used for communicating with backend
 	 * @instance
 	 * @memberOf FragmentPreview
-	 * @review
 	 * @type {{
 	 *  render: !string
 	 * }}
