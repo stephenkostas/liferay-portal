@@ -16,8 +16,7 @@ import getConnectedComponent from '../../store/ConnectedComponent.es';
 import templates from './FragmentEntryLinkListSection.soy';
 
 /**
- * List of available panels
- * @review
+ * This method defines the list of available panels.
  * @type {object[]}
  */
 const SECTION_FLOATING_TOOLBAR_PANELS = [
@@ -65,9 +64,8 @@ class FragmentEntryLinkListSection extends Component {
 	}
 
 	/**
-	 * Creates a new instance of FloatingToolbar
+	 * This method creates a new instance of FloatingToolbar
 	 * @private
-	 * @review
 	 */
 	_createFloatingToolbar() {
 		const config = {
@@ -88,9 +86,8 @@ class FragmentEntryLinkListSection extends Component {
 	}
 
 	/**
-	 * Disposes an existing instance of FloatingToolbar
+	 * This method disposes of an existing instance of FloatingToolbar
 	 * @private
-	 * @review
 	 */
 	_disposeFloatingToolbar() {
 		if (this._floatingToolbar) {
@@ -101,7 +98,7 @@ class FragmentEntryLinkListSection extends Component {
 	}
 
 	/**
-	 * Callback executed when a section lose the focus
+	 * This Callback is executed when a section loses the focus.
 	 * @private
 	 */
 	_handleSectionFocusOut() {
@@ -115,7 +112,7 @@ class FragmentEntryLinkListSection extends Component {
 	}
 
 	/**
-	 * Callback executed when a section is clicked.
+	 * This Callback is executed when a section is clicked.
 	 * @param {Event} event
 	 * @private
 	 */
@@ -132,7 +129,7 @@ class FragmentEntryLinkListSection extends Component {
 	}
 
 	/**
-	 * Callback executed when a section starts being hovered.
+	 * This Callback is executed when the mouse hovers over a section.
 	 * @param {Event} event
 	 * @private
 	 */
@@ -149,7 +146,7 @@ class FragmentEntryLinkListSection extends Component {
 	}
 
 	/**
-	 * Callback executed when a key is pressed on focused section
+	 * This Callback is executed when a key is pressed on the focused section.
 	 * @private
 	 * @param {Event} event
 	 */
@@ -203,40 +200,36 @@ class FragmentEntryLinkListSection extends Component {
 
 /**
  * State definition.
- * @review
  * @static
  * @type {!Object}
  */
 FragmentEntryLinkListSection.STATE = {
 
 	/**
-	 * Internal FloatingToolbar instance.
+	 * FloatingToolbar instance for internal use.
 	 * @default null
 	 * @instance
 	 * @memberOf FragmentEntryLinkListSection
-	 * @review
 	 * @type {object|null}
 	 */
 	_floatingToolbar: Config.internal()
 		.value(null),
 
 	/**
-	 * Section row
+	 * Defines the section row
 	 * @default undefined
 	 * @instance
 	 * @memberof FragmentEntryLinkListSection
-	 * @review
 	 * @type {object}
 	 */
 	row: Config.object()
 		.required(),
 
 	/**
-	 * Section row ID
+	 * Defines the section row ID
 	 * @default undefined
 	 * @instance
 	 * @memberof FragmentEntryLinkListSection
-	 * @review
 	 * @type {string}
 	 */
 	rowId: Config.string()
