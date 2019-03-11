@@ -17,7 +17,6 @@ class FragmentEditor extends PortletBase {
 
 	/**
 	 * @inheritDoc
-	 * @review
 	 */
 	shouldUpdate(changes) {
 		return changes._html ||
@@ -55,7 +54,6 @@ class FragmentEditor extends PortletBase {
 	/**
 	 * The Event handler is executed when any content is changed.
 	 * @private
-	 * @review
 	 */
 	_handleContentChanged() {
 		this.emit(
@@ -68,7 +66,6 @@ class FragmentEditor extends PortletBase {
 	 * This Callback is executed when the CSS editor changes.
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 	_handleCSSChanged(event) {
 		this._css = event.content;
@@ -79,7 +76,6 @@ class FragmentEditor extends PortletBase {
 	 * This Callback is executed when the HTML editor changes.
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 	_handleHTMLChanged(event) {
 		this._html = event.content;
@@ -92,7 +88,6 @@ class FragmentEditor extends PortletBase {
 	 * This Callback is executed when the JS editor changes.
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 	_handleJSChanged(event) {
 		this._js = event.content;
@@ -103,7 +98,6 @@ class FragmentEditor extends PortletBase {
 	 * This method saves the fragment content with the Save button is clicked.
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 	_handleSaveButtonClick(event) {
 		const content = this.getContent();
@@ -178,7 +172,6 @@ FragmentEditor.STATE = {
 	 * @default []
 	 * @instance
 	 * @memberOf FragmentEditor
-	 * @review
 	 * @type Array
 	 */
 	autocompleteTags: Config.arrayOf(
@@ -195,7 +188,6 @@ FragmentEditor.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberOf FragmentEditor
-	 * @review
 	 * @type {!string}
 	 */
 	fragmentCollectionId: Config.string().required(),
@@ -214,7 +206,6 @@ FragmentEditor.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberOf FragmentEditor
-	 * @review
 	 * @type {!string}
 	 */
 
@@ -224,7 +215,6 @@ FragmentEditor.STATE = {
 	 * URLs used for communicating with backend.
 	 * @instance
 	 * @memberOf FragmentEditor
-	 * @review
 	 * @type {{
 	 *  edit: !string,
 	 *	redirect: !string
@@ -245,7 +235,6 @@ FragmentEditor.STATE = {
 	 * @instance
 	 * @memberOf FragmentEditor
 	 * @private
-	 * @review
 	 * @type {string}
 	 */
 	_css: Config.string()
@@ -259,7 +248,6 @@ FragmentEditor.STATE = {
 	 * @instance
 	 * @memberOf FragmentEditor
 	 * @private
-	 * @review
 	 * @type {string}
 	 */
 
@@ -274,7 +262,6 @@ FragmentEditor.STATE = {
 	 * @instance
 	 * @memberOf FragmentEditor
 	 * @private
-	 * @review
 	 * @type {boolean}
 	 */
 
@@ -289,7 +276,6 @@ FragmentEditor.STATE = {
 	 * @instance
 	 * @memberOf FragmentEditor
 	 * @private
-	 * @review
 	 * @type {string}
 	 */
 
@@ -303,7 +289,6 @@ FragmentEditor.STATE = {
 	 * @instance
 	 * @memberOf FragmentEditor
 	 * @private
-	 * @review
 	 * @type {bool}
 	 */
 
