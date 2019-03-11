@@ -12,9 +12,8 @@ const FragmentAutocompleteProcessor = function(...args) {
 };
 
 /**
- * Component that creates an instance of Ace editor
+ * This Component creates an instance of Ace editor
  * to allow code editing.
- * @review
  */
 class AceEditor extends Component {
 
@@ -109,12 +108,11 @@ class AceEditor extends Component {
 	}
 
 	/**
-	 * Returns a match object (if any) for "lfr-" tags
+	 * This method returns a match object (if any) for "lfr-" tags
 	 * inside the given content.
 	 * @param {string} content
 	 * @private
 	 * @return {object} Match result
-	 * @review
 	 */
 	_getAutocompleteMatch(content) {
 		let match = null;
@@ -139,13 +137,12 @@ class AceEditor extends Component {
 	}
 
 	/**
-	 * Returns a tag completion suggestion for the given
+	 * This method returns a tag completion suggestion for the given
 	 * match and selectedSuggestion.
 	 * @param {object} match
 	 * @param {string} selectedSuggestion
 	 * @private
 	 * @return {string}
-	 * @review
 	 */
 	_getAutocompleteSuggestion(match, selectedSuggestion) {
 		const tag = this.autocompleteTags.find(
@@ -156,7 +153,7 @@ class AceEditor extends Component {
 	}
 
 	/**
-	 * Callback executed when the internal Ace editor has been
+	 * This Callback is executed when the internal Ace editor has been
 	 * modified. It simply propagates the event.
 	 * @private
 	 * @review
@@ -181,11 +178,10 @@ class AceEditor extends Component {
 	}
 
 	/**
-	 * Override AceEditor's session setAnnotations method to avoid showing
-	 * misleading messages.
+	 * This overrides the AceEditor's session setAnnotations method to avoid 
+	 * showing misleading messages.
 	 * @param {Object} session AceEditor session
 	 * @private
-	 * @review
 	 */
 	_overrideSetAnnotations(session) {
 		const setAnnotations = session.setAnnotations.bind(session);
@@ -200,8 +196,7 @@ class AceEditor extends Component {
 }
 
 /**
- * Available AceEditor syntax
- * @review
+ * Defines the available AceEditor syntax.
  * @static
  * @type {Object}
  */
@@ -214,7 +209,6 @@ AceEditor.SYNTAX = {
 
 /**
  * State definition.
- * @review
  * @static
  * @type {!Object}
  */
@@ -222,11 +216,10 @@ AceEditor.SYNTAX = {
 AceEditor.STATE = {
 
 	/**
-	 * List of tags to support custom autocomplete in the HTML editor
+	 * Provide the list of tags for custom autocomplete in the HTML editor.
 	 * @default []
 	 * @instance
 	 * @memberOf AceEditor
-	 * @review
 	 * @type Array
 	 */
 
@@ -240,11 +233,10 @@ AceEditor.STATE = {
 	),
 
 	/**
-	 * Initial content sent to the editor
+	 * Defines the initial content sent to the editor.
 	 * @default ''
 	 * @instance
 	 * @memberOf AceEditor
-	 * @review
 	 * @type {string}
 	 */
 
@@ -256,7 +248,6 @@ AceEditor.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberOf AceEditor
-	 * @review
 	 * @see AceEditor.SYNTAX
 	 * @type {!string}
 	 */
