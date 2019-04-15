@@ -32,10 +32,9 @@ class AssetVocabularyCategoriesSelector extends Component {
 	}
 
 	/**
-	 * Opens the dialog tag selection
+	 * Opens the tag selection dialog
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 
 	_handleButtonClicked(event) {
@@ -92,7 +91,6 @@ class AssetVocabularyCategoriesSelector extends Component {
 	 * version to be used as a fallback for old services and implementations
 	 * @private
 	 * @return {string} The serialized, comma-separated version of the selected items
-	 * @review
 	 */
 	_getCategoryIds() {
 		return this.selectedItems.map(selectedItem => selectedItem.value).join();
@@ -102,7 +100,6 @@ class AssetVocabularyCategoriesSelector extends Component {
 	 * Hides the category error
 	 *
 	 * @private
-	 * @review
 	 */
 	_handleInputOnBlur() {
 		this._unexistingCategoryError = false;
@@ -112,7 +109,6 @@ class AssetVocabularyCategoriesSelector extends Component {
 	 * Updates tags fallback and notifies that a new tag has been added
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 
 	_handleItemAdded(event) {
@@ -123,7 +119,6 @@ class AssetVocabularyCategoriesSelector extends Component {
 	 * Updates tags fallback and notifies that a new tag has been removed
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 
 	_handleItemRemoved(event) {
@@ -143,7 +138,6 @@ class AssetVocabularyCategoriesSelector extends Component {
 	 * tags search service
 	 * @param {!string} query
 	 * @private
-	 * @review
 	 */
 
 	_handleQuery(query) {
@@ -202,11 +196,10 @@ AssetVocabularyCategoriesSelector.STATE = {
 	_unexistingCategoryError: Config.bool().value(false),
 
 	/**
-	 * Flag to indicate whether input can create item.
+	 * Flag to indicate whether input can create an item.
 	 * @default false
 	 * @instance
 	 * @memberof AssetVocabularyCategoriesSelector
-	 * @review
 	 * @type {?bool}
 	 */
 	allowInputCreateItem: Config.bool().value(false),
@@ -216,7 +209,6 @@ AssetVocabularyCategoriesSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetVocabularyCategoriesSelector
-	 * @review
 	 * @type {?string}
 	 */
 
@@ -229,7 +221,6 @@ AssetVocabularyCategoriesSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetVocabularyCategoriesSelector
-	 * @review
 	 * @type {?string}
 	 */
 
@@ -240,7 +231,6 @@ AssetVocabularyCategoriesSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetVocabularyCategoriesSelector
-	 * @review
 	 * @type {?string}
 	 */
 
@@ -251,7 +241,6 @@ AssetVocabularyCategoriesSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetVocabularyCategoriesSelector
-	 * @review
 	 * @type {?Array}
 	 */
 
