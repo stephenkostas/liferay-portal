@@ -22,10 +22,9 @@ class AssetTagsSelector extends Component {
 	}
 
 	/**
-	 * Opens the dialog tag selection
+	 * Opens the tag selection dialog
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 
 	_handleButtonClicked() {
@@ -74,7 +73,6 @@ class AssetTagsSelector extends Component {
 	 * version to be used as a fallback for old services and implementations
 	 * @private
 	 * @return {string} The serialized, comma-separated version of the selected items
-	 * @review
 	 */
 	_getTagNames() {
 		return this.selectedItems.map(selectedItem => selectedItem.value).join();
@@ -88,7 +86,6 @@ class AssetTagsSelector extends Component {
 	 * Updates tags fallback and notifies that a new tag has been added
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 
 	_handleItemAdded(event) {
@@ -112,7 +109,6 @@ class AssetTagsSelector extends Component {
 	 * Updates tags fallback and notifies that a new tag has been removed
 	 * @param {!Event} event
 	 * @private
-	 * @review
 	 */
 
 	_handleItemRemoved(event) {
@@ -137,7 +133,6 @@ class AssetTagsSelector extends Component {
 	 * tags search service
 	 * @param {!string} query
 	 * @private
-	 * @review
 	 */
 
 	_handleQuery(query) {
@@ -164,11 +159,10 @@ class AssetTagsSelector extends Component {
 AssetTagsSelector.STATE = {
 
 	/**
-	 * Function to be called every time that change the input value
+	 * Function to be called every time that the input value changes
 	 * @default _handleQuery
 	 * @instance
 	 * @memberof AssetTagsSelector
-	 * @review
 	 * @type {?func}
 	 */
 	_dataSource: Config.func().internal(),
@@ -185,11 +179,10 @@ AssetTagsSelector.STATE = {
 	addCallback: Config.string(),
 
 	/**
-	 * Event name which fires when user selects a display page using item selector
+	 * Event name which fires when user selects a display page using the item selector
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetTagsSelector
-	 * @review
 	 * @type {?string}
 	 */
 
@@ -200,7 +193,6 @@ AssetTagsSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetTagsSelector
-	 * @review
 	 * @type {?string}
 	 */
 
@@ -211,7 +203,6 @@ AssetTagsSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetTagsSelector
-	 * @review
 	 * @type {?string}
 	 */
 
@@ -222,7 +213,6 @@ AssetTagsSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetTagsSelector
-	 * @review
 	 * @type {?string}
 	 */
 
@@ -233,7 +223,6 @@ AssetTagsSelector.STATE = {
 	 * @default []
 	 * @instance
 	 * @memberof AssetTagsSelector
-	 * @review
 	 * @type {?Array<Object>}
 	 */
 
@@ -244,7 +233,6 @@ AssetTagsSelector.STATE = {
 	 * @default undefined
 	 * @instance
 	 * @memberof AssetTagsSelector
-	 * @review
 	 * @type {?string}
 	 */
 
